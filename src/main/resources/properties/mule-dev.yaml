@@ -1,0 +1,8 @@
+## API ##
+api:
+  token: "${secure::api.token}"
+     
+     
+Webservice:
+  host: "jsonplaceholder.typicode.com"
+  timeout: "8000"

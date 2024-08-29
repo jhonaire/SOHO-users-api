@@ -1,0 +1,24 @@
+#%RAML 1.0 Library
+usage: Library of types.
+
+
+types:
+  create_request_add_client:
+    type: object
+    properties:
+      email:
+        type: string
+        example: "ventasabc@coltoys.com"
+      first_name:
+        type: string
+        example: "coltoys"
+      last_name:
+        type: string
+        example: "coltoys"
+      phone?: 
+        type: string
+        example: "+245922251299"
+      address?:
+        type: string
+        example: "coltoys av 13 str 123"
+          

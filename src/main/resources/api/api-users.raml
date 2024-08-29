@@ -1,0 +1,48 @@
+#%RAML 1.0
+title: api-users
+
+uses:
+  lib-types: Types/types.raml
+
+
+securitySchemes:
+  customToken:
+    description: Custom Token Validation
+    type: x-custom
+    describedBy:
+      headers:
+        Authorization:
+          description: Authorization Token
+          type: string
+          required: true
+      responses:
+        401:
+          description: Invalid Token or Missing
+
+securedBy: [ customToken ]
+
+protocols: [HTTP,HTTPS]
+mediaType:
+  - application/json
+
+/users:
+  get:
+    displayName: Get all users information.
+    description: In this api you can get all User data.
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include /Examples/Responses/Response-get-users.json
+  post:
+    displayName: Create a New User
+    description: In the example there are all the fields that can be set. You can just fill out the ones you need or have.
+    body:
+      application/json:
+        type: lib-types.create_request_add_client
+        example: !include Examples/Request/Request-users.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: !include Examples/Responses/Response-add-users.json

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<error-handler name="error-handlerError_Handler" doc:id="a223448e-adf7-4ff0-9e03-b68eb09f3972" >
+		<on-error-propagate type="APIKIT:BAD_REQUEST">
+			<flow-ref doc:name="utils-Error-Response" doc:id="d3a97b81-e637-4b3d-81d0-473a019ca26b" name="utils-Error-Response"/>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+			<flow-ref doc:name="utils-Error-Response" doc:id="48c138f6-376b-4d68-a540-19712a7b3a72" name="utils-Error-Response" />
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+			<flow-ref doc:name="utils-Error-Response" doc:id="ab30dcd9-2968-4f71-9a50-001bed2ccd08" name="utils-Error-Response" />
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+			<flow-ref doc:name="utils-Error-Response" doc:id="0252c857-664d-46ed-9ea8-f06c60b86dd0" name="utils-Error-Response" />
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+			<flow-ref doc:name="utils-Error-Response" doc:id="9c7033a9-9bb1-4101-8c48-d2a14813142f" name="utils-Error-Response" />
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+			<flow-ref doc:name="utils-Error-Response" doc:id="de032fd9-8b6a-4880-a6f9-29757a6bcba4" name="utils-Error-Response" />
+            </on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1e7a8b81-23e2-4a0b-af93-33bb6979362a" type="TOKEN:AUTHORIZATION">
+			<flow-ref doc:name="utils-Error-Response" doc:id="3d56be60-9fc0-4169-83ea-fb4031dbeb24" name="utils-Error-Response" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="fa8840e7-e225-4a8c-8f6b-71c0c9930f6e" type="DATA:MISSING" >
+			<flow-ref doc:name="utils-Error-Response" doc:id="2b33952e-f22e-41e5-ba4f-2c40ce9c9a9e" name="utils-Error-Response" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a91f65ed-ebbe-4cc1-972b-51f5cda41fbf" type="ANY">
+			<flow-ref doc:name="utils-Error-Response" doc:id="64fd0a71-c95e-44a5-bd7b-390ade6cc8a2" name="utils-Error-Response" />
+		</on-error-propagate>
+	</error-handler>
+
+</mule>

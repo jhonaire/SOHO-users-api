@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="23b29862-e479-491b-8afb-f03757aaf071" />
+	<sub-flow name="Insert-Users-memoryDB" doc:id="e60fee26-eb70-48d0-b28b-ae29ab412389" >
+		<os:retrieve-all doc:name="Retrieve all" doc:id="bff5a4bb-5c68-4a73-a6cb-7104ee4e0a43" objectStore="Object_store" />
+		<ee:transform doc:name="Set data to insert" doc:id="e14a9bc2-a1eb-41d9-a355-e553750dd313" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var data = if(isEmpty(payload)) write([],'application/json') else payload[0]
+---
+
+read (data, 'application/json') ++ [vars.userData]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<os:store doc:name="Store" doc:id="b012a4df-ab2c-401f-867d-7f876c3ab224" key="users" objectStore="Object_store" />
+		<set-payload value='#["User Created"]' doc:name="Set response" doc:id="8aa0f6ee-1f16-4d04-8b32-8c6c620d6b07" />
+	</sub-flow>
+	<sub-flow name="Get-Users-memoryDB" doc:id="536ab992-e00d-4a61-b4db-cbe639173a44" >
+		<os:retrieve-all doc:name="Retrieve all" doc:id="8a068238-0758-42f9-8cdb-7d5032906149" objectStore="Object_store" />
+		<ee:transform doc:name="Set user data" doc:id="2937ae27-52d9-4220-bc27-e8bd9016f835" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="memoryUsers" ><![CDATA[%dw 2.0
+output application/json
+var data = if(isEmpty(payload)) write([],'application/json') else payload[0]
+---
+
+read (data, 'application/json')]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>

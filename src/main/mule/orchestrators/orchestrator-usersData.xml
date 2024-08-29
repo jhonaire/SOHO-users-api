@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<sub-flow name="orchestrator-UsersData" doc:id="9f2c1472-57d7-4ce6-97dc-1d9256e8a22c" >
+		<flow-ref doc:name="Get-Users-memoryDB" doc:id="3b7c6be0-8d38-45f1-9d74-70f97157dfe8" name="Get-Users-memoryDB" />
+		<flow-ref doc:name="webService-get-additional-users" doc:id="3ac3d7e9-0771-4040-ad9f-f462556b0d40" name="webService-get-additional-users"/>
+		<ee:transform doc:name="Set Data" doc:id="13c8dea0-3a2e-4a9f-bfa4-5b8eb9603697" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+vars.memoryUsers ++ vars.additionalUsers]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+
+</sub-flow>
+</mule>

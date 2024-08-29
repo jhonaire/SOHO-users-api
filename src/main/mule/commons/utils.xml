@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="utils-validate-token" doc:id="ac4cdabe-d771-46a0-9396-a53df68e5498">
+        <set-variable variableName="authHeader" value="#[attributes.headers['Authorization']]" doc:name="Set Authorization Header"/>
+        <choice doc:name="Choice">
+            <when expression="#[vars.authHeader != p('api.token')]">
+				<set-variable value="401" doc:name="Set httpStatus" doc:id="3329f374-22f5-4cd9-9abc-fe211e60db68" variableName="httpStatus"/>
+				<raise-error doc:name="Raise error" doc:id="07812a4e-1b92-4881-8633-a1a1d3328d42" type="TOKEN:AUTHORIZATION" description="Invalid Token or Missing"/>
+            </when>
+        </choice>
+    </sub-flow>
+	<sub-flow name="utils-validate-missing-data" doc:id="bae54484-793c-435f-b74e-0297d4d353f6">
+		<choice doc:name="Choice" doc:id="76beb0e1-8ca2-48c7-a1ae-7fb2520d4039">
+			<when expression="#[isEmpty(vars.userData.first_name)or isEmpty(vars.userData.last_name) or isEmpty(vars.userData.email)]">
+				<set-variable value="400" doc:name="Set httpStatus" doc:id="60fc0701-dac4-4346-94d7-65fb4d0132e4" variableName="httpStatus" />
+				<raise-error doc:name="Raise error" doc:id="79a1eb2f-a19a-4aef-b13c-8e27ad55f23b" type="DATA:MISSING" description="required key [email, first_name or last_name] is empty" />
+			</when>
+		</choice>
+	</sub-flow>
+	<sub-flow name="utils-Success-Response" doc:id="8bdee7df-9eea-41f4-8c6f-fbf095ed8973" >
+		<ee:transform doc:name="Set final response" doc:id="3918f54c-5655-43fc-9edb-5a5cfe69bb6f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  cid: uuid(),
+  status: "Success",
+  code: vars.httpStatus default 200,
+  timestamp: now(),
+  data: payload,
+  error: []
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="utils-Error-Response" doc:id="59317190-baf3-493c-9011-978cba7103d6" >
+		<ee:transform doc:name="Set final response" doc:id="c7c12551-83a2-4f0e-a3a6-1ca434e7fb45" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  cid: uuid(),
+  status: "Failed",
+  code: vars.httpStatus default 500,
+  timestamp: now(),
+  data: [],
+  error: error.detailedDescription
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

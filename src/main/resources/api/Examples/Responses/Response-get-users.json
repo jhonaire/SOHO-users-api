@@ -1,0 +1,22 @@
+{
+    "cid": "b32319a0-b72f-11eb-9072-0a4be60c780f",
+    "status": "Success",
+    "code": 200,
+    "timestamp": "2021-05-17T16:48:28.026Z",
+    "data": [{
+        "address": "AV AVIACION 5092",
+        "email": "QA_TEST@gmail.com",
+        "name": "User Name",
+        "last_name": "User Last Name",
+        "phone": "+5412121122"
+    },
+    {
+        "address": "TEST ET CUATRO",
+        "email": "TEST@gmail.com",
+        "name": "User Name",
+        "last_name": "User Last Name",
+        "phone": "+54121212342"
+    }
+    ],
+    "error": []
+}

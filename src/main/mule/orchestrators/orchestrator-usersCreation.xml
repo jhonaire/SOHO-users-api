@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+	<sub-flow name="orchestrator-Users-creation" doc:id="93975aeb-dadf-4298-8cd0-5a5a39ba3a8c" >
+		<set-variable value="#[payload]" doc:name="Set userData" doc:id="47e4ce02-e8ea-4d0d-a8a5-0f32abed7bef" variableName="userData" />
+		<flow-ref doc:name="utils-validate-missing-data" doc:id="c5f1448f-8286-4282-84a8-192a194ad303" name="utils-validate-missing-data"/>
+		<flow-ref doc:name="Insert-Users-memoryDB" doc:id="cb24d774-1bf9-416a-b9dd-ee2ac25cee33" name="Insert-Users-memoryDB" />
+		<set-variable value="201" doc:name="Set httpStatus" doc:id="106439c6-b4f9-4849-8a7f-bd5bbe7eb996" variableName="httpStatus" />
+	
+</sub-flow>
+</mule>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <http:listener-config name="api-users-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="api-users-config" api="api-users.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="api-users-main">
+        <http:listener config-ref="api-users-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <flow-ref doc:name="utils-validate-token" doc:id="41461fc8-27ff-4330-8bba-bcff88541dca" name="utils-validate-token"/>
+		<apikit:router config-ref="api-users-config" />
+		<error-handler ref="error-handlerError_Handler" />
+    </flow>
+    <flow name="api-users-console">
+        <http:listener config-ref="api-users-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="api-users-config" />
+		<error-handler ref="error-handlerError_Handler" />
+    </flow>
+    <flow name="get:\users:api-users-config">
+		<flow-ref doc:name="orchestrator-UsersData" doc:id="2840623c-d114-413b-8c20-f42e4a16f8b6" name="orchestrator-UsersData" />
+		<flow-ref doc:name="utils-Success-Response" doc:id="50c26834-4d5f-4def-96da-6b95b96f8db6" name="utils-Success-Response" />
+		<error-handler ref="error-handlerError_Handler" />
+    </flow>
+    <flow name="post:\users:application\json:api-users-config">
+        <flow-ref doc:name="orchestrator-Users-creation" doc:id="3970bc77-a306-43f9-a2b6-e267b8a0e03c" name="orchestrator-Users-creation"/>
+		<flow-ref doc:name="utils-Success-Response" doc:id="bf89d601-d7b3-4c7b-a972-4e14a267a78e" name="utils-Success-Response"/>
+		<error-handler ref="error-handlerError_Handler" />
+    </flow>
+</mule>

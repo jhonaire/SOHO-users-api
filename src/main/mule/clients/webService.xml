@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="webService-get-additional-users" doc:id="08046052-6cc4-4d54-a70d-756c8d323949" >
+		<http:request method="GET" doc:name="Request additional Users" doc:id="fedf1049-2e84-4eba-8447-a449783780f6" config-ref="JSONPlaceHolder_configuration" path="/users"/>
+		<ee:transform doc:name="Set additional Data" doc:id="d51d948e-c10d-47aa-82d3-6d43d2670e51" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="additionalUsers" ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (ob)->{
+    "first_name": (ob.name splitBy (" "))[0] as String,
+    "last_name": (ob.name splitBy (" "))[1] as String,
+    "address": ob.address.city ++ " " ++ ob.address.street ++ " " ++ ob.address.suite,
+    "phone": ob.phone as String,
+    "email": ob.email as String
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<error-handler ref="error-handlerError_Handler" />
+	</flow>
+</mule>
+
