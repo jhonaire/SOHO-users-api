@@ -36,7 +36,7 @@ end
 
 <div style="page-break-after: always; break-after: page;"></div>
 
-## Connections info
+## Información de conexión
 
 | nombre                   | valor                                                        |
 | ---------------------- | ------------------------------------------------------------ |
@@ -57,7 +57,7 @@ end
 
 <div id='ides1'> </div>
 
-## Informacion de despliegue
+## Información de despliegue
 
 #### Paso 1
 Al momento de querer ejecutar la api se deberá configurar en los argumentos de despliegue los siguientes parámetros.
